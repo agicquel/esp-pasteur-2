@@ -3,8 +3,6 @@
 PasteurESPSys::PasteurESPSys() : rest_server(HTTP_REST_PORT), infoDisplay(), matrixDisplay()
 {
     EEPROM.begin(512);
-    WiFi.mode(WIFI_STA);
-    WiFi.disconnect();
     EEPROM_conf_read();
     menu_state = MENU_CONFIG;
     system_state = IDLE;
@@ -14,6 +12,8 @@ PasteurESPSys::PasteurESPSys() : rest_server(HTTP_REST_PORT), infoDisplay(), mat
 
 bool PasteurESPSys::connect_wifi()
 {
+    WiFi.mode(WIFI_STA);
+    WiFi.disconnect();
     float sec_timeout = 10.0;
     float sec_time = 0.0;
     String loading = "";
@@ -75,6 +75,7 @@ void PasteurESPSys::handle_message_changed()
             EEPROM_conf_write();
         }
     }
+    rest_server.send(200, "text/plain", "Message changed.");
 }
 
 void PasteurESPSys::handle_menu()
@@ -236,6 +237,10 @@ void PasteurESPSys::run()
         EEPROM_conf_read();
         matrixDisplay.set_text(conf.message);
         handle_menu();
+        if (!lopy_subscribed())
+        {
+            system_state = SUBSCRIBING;
+        }
         break;
     }
 }
