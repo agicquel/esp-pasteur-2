@@ -10,6 +10,7 @@
 #include "conf_gpio.h"
 #include "info_display.h"
 #include "matrix_display.h"
+#include "pasteur_display.h"
 
 #define ARRAY_SIZE(x) sizeof(x) / sizeof(x[0])
 
@@ -53,6 +54,7 @@ private:
     ESP8266WebServer rest_server;
     InfoDisplay infoDisplay;
     MatrixDisplay matrixDisplay;
+    PasteurDisplay pasteurDisplay;
 
     bool connect_wifi();
     void lopy_subscribe();

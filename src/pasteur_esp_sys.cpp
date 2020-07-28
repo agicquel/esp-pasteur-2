@@ -1,6 +1,6 @@
 #include "pasteur_esp_sys.h"
 
-PasteurESPSys::PasteurESPSys() : rest_server(HTTP_REST_PORT), infoDisplay(), matrixDisplay()
+PasteurESPSys::PasteurESPSys() : rest_server(HTTP_REST_PORT), infoDisplay(), matrixDisplay(), pasteurDisplay()
 {
     EEPROM.begin(512);
     EEPROM_conf_read();
@@ -236,6 +236,7 @@ void PasteurESPSys::run()
         rest_server.handleClient();
         EEPROM_conf_read();
         matrixDisplay.set_text(conf.message);
+        pasteurDisplay.set_text(conf.message);
         handle_menu();
         if (!lopy_subscribed())
         {
